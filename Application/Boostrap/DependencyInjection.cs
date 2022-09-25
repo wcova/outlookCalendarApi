@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace Application.Boostrap
+namespace outlookCalendarApi.Application.Boostrap
 {
     public static class DependencyInjection
     {

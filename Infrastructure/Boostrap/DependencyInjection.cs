@@ -4,10 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using outlookCalendarApi.Domain.Dtos;
+using outlookCalendarApi.Infrastructure.Clients;
+using outlookCalendarApi.Infrastructure.Clients.Interfaces;
 using System;
 using System.Collections.Generic;
 
-namespace Infrastructure.Boostrap
+namespace outlookCalendarApi.Infrastructure.Boostrap
 {
     public static class DependencyInjection
     {
@@ -57,6 +59,10 @@ namespace Infrastructure.Boostrap
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApi(configuration.GetSection("AzureAd"));
+
+            services.AddHttpClient();
+
+            services.AddScoped<IGraphClient, GraphClient>();
 
             return services;
         }

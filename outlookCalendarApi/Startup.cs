@@ -1,10 +1,10 @@
-﻿using Application.Boostrap;
-using Infrastructure.Boostrap;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using outlookCalendarApi.Application.Boostrap;
+using outlookCalendarApi.Infrastructure.Boostrap;
 using System.IO;
 
 namespace outlookCalendarApi
