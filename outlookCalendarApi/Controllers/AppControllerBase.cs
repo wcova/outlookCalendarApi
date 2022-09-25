@@ -5,7 +5,7 @@ using outlookCalendarApi.Domain.Dtos;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace outlookCalendarApi.Controllers.V1
+namespace outlookCalendarApi.Controllers
 {
     public abstract class AppControllerBase : ControllerBase
     {

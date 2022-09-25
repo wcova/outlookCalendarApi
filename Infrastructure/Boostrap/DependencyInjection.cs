@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
@@ -18,10 +19,24 @@ namespace outlookCalendarApi.Infrastructure.Boostrap
             var azureAD = new AzureADDto();
             configuration.GetSection("AzureAd").Bind(azureAD);
 
+            services.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+            });
+
+            services.AddVersionedApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.CustomSchemaIds(x => x.FullName);
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "outlookCalendarApi", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "outlookCalendarApi v1.0", Version = "1.0" });
+                //c.SwaggerDoc("v{v}", new OpenApiInfo { Title = "outlookCalendarApi v{v.V}", Version = "{v.V}" }); for new versions
                 c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the oauth2 schema",

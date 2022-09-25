@@ -16,11 +16,9 @@ namespace outlookCalendarApi.Application.UserCases.V1.Commands.Create
 
     public class SetTokenCommandHandler : IRequestHandler<SetTokenCommand, ResponseDto<string>>
     {
-        private readonly IHttpClientFactory _clientFactory;
         private readonly IGraphClient _graphClient;
         public SetTokenCommandHandler(IHttpClientFactory clientFactory, IGraphClient graphClient)
         {
-            _clientFactory = clientFactory;
             _graphClient = graphClient;
         }
 
@@ -38,7 +36,7 @@ namespace outlookCalendarApi.Application.UserCases.V1.Commands.Create
             else
             {
                 response.AddNotification("#1001", nameof(token), "Invalid Token");
-                response.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                response.StatusCode = HttpStatusCode.BadRequest;
             }
 
             return response;
