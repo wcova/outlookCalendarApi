@@ -45,6 +45,17 @@ namespace outlookCalendarApi
             app.UseCors();
             app.UseRouting();
 
+            app.UseHttpsRedirection();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.OAuthClientId("07d060af-d6f7-407e-9999-e88a0960fb66");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "outlookCalendarApi");
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 app.UseEndpoints(endpoints =>
