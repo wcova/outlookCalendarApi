@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30128.74
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "outlookCalendarApi", "outlookCalendarApi.csproj", "{FE863D48-2ADD-41B9-B91F-7BC485328225}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "outlookCalendarApi", "outlookCalendarApi.csproj", "{FE863D48-2ADD-41B9-B91F-7BC485328225}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{4AAD93D0-46AD-425F-96BD-A5B150DF8140}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "..\Application\Application.csproj", "{0323CFE4-68F9-499D-A15C-65B5DFCC33D6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "..\Domain\Domain.csproj", "{CE0A251A-9154-42BE-883F-F33BC96D3996}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "..\Infrastructure\Infrastructure.csproj", "{935EDC4C-15C5-43C5-B1DB-B0C88442E08F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,18 @@ Global
 		{4AAD93D0-46AD-425F-96BD-A5B150DF8140}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AAD93D0-46AD-425F-96BD-A5B150DF8140}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AAD93D0-46AD-425F-96BD-A5B150DF8140}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0323CFE4-68F9-499D-A15C-65B5DFCC33D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0323CFE4-68F9-499D-A15C-65B5DFCC33D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0323CFE4-68F9-499D-A15C-65B5DFCC33D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0323CFE4-68F9-499D-A15C-65B5DFCC33D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE0A251A-9154-42BE-883F-F33BC96D3996}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE0A251A-9154-42BE-883F-F33BC96D3996}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE0A251A-9154-42BE-883F-F33BC96D3996}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE0A251A-9154-42BE-883F-F33BC96D3996}.Release|Any CPU.Build.0 = Release|Any CPU
+		{935EDC4C-15C5-43C5-B1DB-B0C88442E08F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{935EDC4C-15C5-43C5-B1DB-B0C88442E08F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{935EDC4C-15C5-43C5-B1DB-B0C88442E08F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{935EDC4C-15C5-43C5-B1DB-B0C88442E08F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>outlookCalendarApi.Domain</RootNamespace>
+    <AssemblyName>outlookCalendarApi.Domain</AssemblyName>
+  </PropertyGroup>
+
+</Project>
