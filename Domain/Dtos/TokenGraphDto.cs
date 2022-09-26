@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace outlookCalendarApi.Domain.Dtos
+namespace outlookCalendarApi.Application.Dtos
 {
     public class TokenGraphDto
     {

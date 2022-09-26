@@ -1,19 +1,21 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using outlookCalendarApi.Domain.Dtos;
+using outlookCalendarApi.Application.Settings;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace outlookCalendarApi.Controllers
 {
+    [ApiController]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public abstract class AppControllerBase : ControllerBase
     {
         private ISender _mediator;
 
         protected ISender Mediator => _mediator ?? (_mediator = HttpContext.RequestServices.GetRequiredService<ISender>());
 
-        public IActionResult Result<T>(ResponseDto<T> response)
+        public IActionResult Result<T>(Response<T> response)
         {
             AddHeaders(this, response);
             if (!response.IsValid)
@@ -24,7 +26,7 @@ namespace outlookCalendarApi.Controllers
             return RequestSucess(response);
         }
 
-        private IActionResult RequestError<T>(ResponseDto<T> response)
+        private IActionResult RequestError<T>(Response<T> response)
         {
             return new JsonResult(response.Notifications)
             {
@@ -32,7 +34,7 @@ namespace outlookCalendarApi.Controllers
             };
         }
 
-        private IActionResult RequestSucess<T>(ResponseDto<T> response)
+        private IActionResult RequestSucess<T>(Response<T> response)
         {
             return new JsonResult(response.Content)
             {
@@ -40,7 +42,7 @@ namespace outlookCalendarApi.Controllers
             };
         }
 
-        private void AddHeaders<T>(ControllerBase controller, ResponseDto<T> response)
+        private void AddHeaders<T>(ControllerBase controller, Response<T> response)
         {
             if (!response.Headers.Any())
             {

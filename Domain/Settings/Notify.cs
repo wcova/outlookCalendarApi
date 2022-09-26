@@ -1,6 +1,6 @@
-﻿namespace outlookCalendarApi.Domain.Dtos
+﻿namespace outlookCalendarApi.Application.Settings
 {
-    public class NotifyDto
+    public class Notify
     {
         public string Code { get; set; }
 

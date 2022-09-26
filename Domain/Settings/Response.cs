@@ -2,40 +2,40 @@
 using System.Linq;
 using System.Net;
 
-namespace outlookCalendarApi.Domain.Dtos
+namespace outlookCalendarApi.Application.Settings
 {
-    public class ResponseDto<T>
+    public class Response<T>
     {
         public T Content { get; set; }
 
         public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.OK;
 
 
-        public List<NotifyDto> Notifications { get; }
+        public List<Notify> Notifications { get; }
 
         public bool IsValid => !Notifications.Any();
 
         public Dictionary<string, string> Headers { get; set; }
 
-        public ResponseDto()
+        public Response()
         {
-            Notifications = new List<NotifyDto>();
+            Notifications = new List<Notify>();
             Headers = new Dictionary<string, string>();
         }
 
-        public void AddNotifications(IList<NotifyDto> notifies)
+        public void AddNotifications(IList<Notify> notifies)
         {
             Notifications.AddRange(notifies);
         }
 
-        public void AddNotification(NotifyDto notification)
+        public void AddNotification(Notify notification)
         {
             Notifications.Add(notification);
         }
 
         public void AddNotification(string code, string property, string message)
         {
-            Notifications.Add(new NotifyDto
+            Notifications.Add(new Notify
             {
                 Code = code,
                 Message = message,

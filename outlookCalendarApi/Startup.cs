@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -23,8 +24,6 @@ namespace outlookCalendarApi
                         .AddEnvironmentVariables();
 
             Configuration = configurationBuilder.Build();
-
-            services.AddControllers();
 
             services.AddApplication();
             services.AddInfrastructure(Configuration);

@@ -1,20 +1,20 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
-using outlookCalendarApi.Domain.Dtos;
+using outlookCalendarApi.Application.Settings;
 using outlookCalendarApi.Infrastructure.Clients.Interfaces;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace outlookCalendarApi.Application.UserCases.V1.Commands.Create
+namespace outlookCalendarApi.Application.UserCases.V1.GraphOperations.Commands.Create
 {
-    public class SetTokenCommand : IRequest<ResponseDto<string>>
+    public class SetTokenCommand : IRequest<Response<string>>
     {
         public HttpContext Context { get; set; }
     }
 
-    public class SetTokenCommandHandler : IRequestHandler<SetTokenCommand, ResponseDto<string>>
+    public class SetTokenCommandHandler : IRequestHandler<SetTokenCommand, Response<string>>
     {
         private readonly IGraphClient _graphClient;
         public SetTokenCommandHandler(IHttpClientFactory clientFactory, IGraphClient graphClient)
@@ -22,11 +22,11 @@ namespace outlookCalendarApi.Application.UserCases.V1.Commands.Create
             _graphClient = graphClient;
         }
 
-        public async Task<ResponseDto<string>> Handle(SetTokenCommand request, CancellationToken cancellationToken)
+        public async Task<Response<string>> Handle(SetTokenCommand request, CancellationToken cancellationToken)
         {
             var token = await _graphClient.GetAccessToken(request.Context);
 
-            var response = new ResponseDto<string>();
+            var response = new Response<string>();
 
             if (!string.IsNullOrEmpty(token))
             {

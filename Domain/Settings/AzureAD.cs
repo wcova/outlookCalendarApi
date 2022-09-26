@@ -1,6 +1,6 @@
-﻿namespace outlookCalendarApi.Domain.Dtos
+﻿namespace outlookCalendarApi.Application.Settings
 {
-    public class AzureADDto
+    public class AzureAD
     {
         public string Instance { get; set; }
         public string TenantId { get; set; }

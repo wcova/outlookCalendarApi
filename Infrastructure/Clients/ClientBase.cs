@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace outlookCalendarApi.Infrastructure.Clients
 {
@@ -15,10 +17,10 @@ namespace outlookCalendarApi.Infrastructure.Clients
         }
 
         public async Task<T> PostAsync<T>(
-            string url, 
-            dynamic body, 
+            string url,
+            dynamic body,
             bool IsFormEncoded = false) where T : class
-        { 
+        {
             var client = _clientFactory.CreateClient();
             var data = JsonConvert.SerializeObject(body);
             HttpContent content = null;
@@ -35,7 +37,24 @@ namespace outlookCalendarApi.Infrastructure.Clients
 
             var httpResponse = await client.PostAsync(url, content);
 
-            var response =  await httpResponse.Content.ReadAsStringAsync();
+            var response = await httpResponse.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<T>(response);
+        }
+
+        public async Task<T> GetAsync<T>(
+            string request,
+            string token = "",
+            bool IsWithToken = false) where T : class
+        {
+            var client = _clientFactory.CreateClient();
+
+            if (IsWithToken)
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var httpResponse = await client.GetAsync(request);
+
+            var response = await httpResponse.Content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<T>(response);
         }

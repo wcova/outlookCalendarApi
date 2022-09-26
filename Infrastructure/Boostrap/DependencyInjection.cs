@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
-using outlookCalendarApi.Domain.Dtos;
+using outlookCalendarApi.Application.Settings;
 using outlookCalendarApi.Infrastructure.Clients;
 using outlookCalendarApi.Infrastructure.Clients.Interfaces;
 using System;
@@ -16,7 +16,7 @@ namespace outlookCalendarApi.Infrastructure.Boostrap
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            var azureAD = new AzureADDto();
+            var azureAD = new AzureAD();
             configuration.GetSection("AzureAd").Bind(azureAD);
 
             services.AddApiVersioning(options =>
