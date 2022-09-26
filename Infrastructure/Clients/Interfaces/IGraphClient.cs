@@ -11,5 +11,6 @@ namespace outlookCalendarApi.Infrastructure.Clients.Interfaces
         Task<OdataDto<EventDto>> GetEvents(string tokenGraph, PaggingBase pagging);
         Task<EventDto> GetEventById(string tokenGraph, string id);
         Task DeleteEventById(string tokenGraph, string id);
+        Task<EventDto> CreateEvent(EventDto eventCalender, string token);
     }
 }

@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using outlookCalendarApi.Application.Dtos;
 using outlookCalendarApi.Application.Settings;
+using outlookCalendarApi.Application.UserCases.V1.EventOperations.Commands.Delete;
+using outlookCalendarApi.Application.UserCases.V1.EventOperations.Commands.Update;
 using outlookCalendarApi.Application.UserCases.V1.EventOperations.Queries;
-using outlookCalendarApi.Application.UserCases.V1.GraphOperations.Commands.Delete;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -53,5 +54,30 @@ namespace outlookCalendarApi.Controllers.V1
             [Required][FromHeader(Name = "tokenGraph")] string token, 
             string id) 
             => Result(await Mediator.Send(new DeleteEventByIdCommand { Token = token, Id = id }));
+
+        /// <summary>
+        /// Create Event by Calendar for an email logged
+        /// </summary>
+        /// <returns>Event</returns>
+        [HttpPost("CreateEvent")]
+        [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<Notify>), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateEvent(
+            [Required][FromHeader(Name = "tokenGraph")] string token,
+            EventDto body)
+            => Result(await Mediator.Send(new CreateEventCommand { Token = token, Event = body }));
+
+        /// <summary>
+        /// Update event for an email logged
+        /// </summary>
+        /// <returns>Event</returns>
+        [HttpPost("UpdateEvent/{id}")]
+        [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<Notify>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(List<Notify>), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateEvent(
+            [Required][FromHeader(Name = "tokenGraph")] string token,
+            EventDto body)
+            => Result(await Mediator.Send(new UpdateEventCommand { Token = token, Event = body }));
     }
 }

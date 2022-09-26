@@ -1,15 +1,12 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Logging;
-using outlookCalendarApi.Application.Dtos;
 using outlookCalendarApi.Application.Settings;
 using outlookCalendarApi.Application.UserCases.V1.EventOperations.Queries;
 using outlookCalendarApi.Domain.Exceptions;
 using outlookCalendarApi.Infrastructure.Clients.Interfaces;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace outlookCalendarApi.Application.UserCases.V1.GraphOperations.Commands.Delete
+namespace outlookCalendarApi.Application.UserCases.V1.EventOperations.Commands.Delete
 {
     public class DeleteEventByIdCommand : IRequest<Response<string>>
     {

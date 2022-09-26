@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿//using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using outlookCalendarApi.Application.Dtos;
 using outlookCalendarApi.Domain.Exceptions;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace outlookCalendarApi.Infrastructure.Clients
@@ -21,27 +23,33 @@ namespace outlookCalendarApi.Infrastructure.Clients
         public async Task<T> PostAsync<T>(
             string url,
             dynamic body,
-            bool IsFormEncoded = false) where T : class
+            string token = "",
+            bool IsWithToken = false) where T : class
         {
             var client = _clientFactory.CreateClient();
-            var data = JsonConvert.SerializeObject(body);
+            var data = Newtonsoft.Json.JsonConvert.SerializeObject(body);
             HttpContent content = null;
 
-            if (IsFormEncoded)
-            {
-                var bodyToFormEncoded = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
-                content = new FormUrlEncodedContent(bodyToFormEncoded);
-            }
-            else
-            {
-                content = new StringContent(data, Encoding.UTF8, "application/json");
-            }
+            if (IsWithToken)
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var bodyToFormEncoded = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
+            content = new FormUrlEncodedContent(bodyToFormEncoded);
 
             var httpResponse = await client.PostAsync(url, content);
 
             var response = await httpResponse.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<T>(response);
+            if (httpResponse.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                var error = Newtonsoft.Json.JsonConvert.DeserializeObject<Error>(response);
+
+                throw new ClientException(
+                    string.Format("Code: {0},Message: {1}", error.Code, error.Message),
+                    httpResponse.StatusCode);
+            }
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(response);
         }
 
         public async Task<T> GetAsync<T>(
@@ -58,16 +66,16 @@ namespace outlookCalendarApi.Infrastructure.Clients
 
             var response = await httpResponse.Content.ReadAsStringAsync();
 
-            if(httpResponse.StatusCode != System.Net.HttpStatusCode.OK)
+            if (httpResponse.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                var error = JsonConvert.DeserializeObject<Error>(response);
+                var error = Newtonsoft.Json.JsonConvert.DeserializeObject<Error>(response);
 
                 throw new ClientException(
-                    string.Format("Code: {0},Message: {1}", error.Code, error.Message), 
+                    string.Format("Code: {0},Message: {1}", error.Code, error.Message),
                     httpResponse.StatusCode);
             }
 
-            return JsonConvert.DeserializeObject<T>(response);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(response);
         }
 
         public async Task DeleteAsync(
@@ -86,12 +94,74 @@ namespace outlookCalendarApi.Infrastructure.Clients
 
             if (httpResponse.StatusCode != System.Net.HttpStatusCode.NoContent)
             {
-                var error = JsonConvert.DeserializeObject<Error>(response);
+                var error = Newtonsoft.Json.JsonConvert.DeserializeObject<Error>(response);
 
                 throw new ClientException(
                     string.Format("Code: {0},Message: {1}", error.Code, error.Message),
                     httpResponse.StatusCode);
             }
+        }
+
+        public async Task<T> PostAsync<T>(
+            string url,
+            T body,
+            string token = "",
+            bool IsWithToken = false) where T : class
+        {
+            var client = _clientFactory.CreateClient();
+            var data = Newtonsoft.Json.JsonConvert.SerializeObject(body);
+            HttpContent content = null;
+
+            if (IsWithToken)
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+
+            var httpResponse = await client.PostAsync(url, content);
+
+            var response = await httpResponse.Content.ReadAsStringAsync();
+
+            if (httpResponse.StatusCode != System.Net.HttpStatusCode.Created)
+            {
+                var error = Newtonsoft.Json.JsonConvert.DeserializeObject<Error>(response);
+
+                throw new ClientException(
+                    string.Format("Code: {0},Message: {1}", error.Code, error.Message),
+                    httpResponse.StatusCode);
+            }
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(response);
+        }
+
+        public async Task<T> UpdateAsync<T>(
+            string url,
+            T body,
+            string token = "",
+            bool IsWithToken = false) where T : class
+        {
+            var client = _clientFactory.CreateClient();
+            var data = Newtonsoft.Json.JsonConvert.SerializeObject(body);
+            HttpContent content = null;
+
+            if (IsWithToken)
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+
+            var httpResponse = await client.PatchAsync(url, content);
+
+            var response = await httpResponse.Content.ReadAsStringAsync();
+
+            if (httpResponse.StatusCode != System.Net.HttpStatusCode.Created)
+            {
+                var error = Newtonsoft.Json.JsonConvert.DeserializeObject<Error>(response);
+
+                throw new ClientException(
+                    string.Format("Code: {0},Message: {1}", error.Code, error.Message),
+                    httpResponse.StatusCode);
+            }
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(response);
         }
     }
 }

@@ -3,9 +3,9 @@ using outlookCalendarApi.Application.Settings;
 
 namespace outlookCalendarApi.Application.UserCases.V1.EventOperations.Queries
 {
-    public class GetEventsValidator : AbstractValidator<PaggingBase>
+    public class CreateEventValidator : AbstractValidator<PaggingBase>
     {
-        public GetEventsValidator()
+        public CreateEventValidator()
         {
             RuleFor(x => x.PageSize)
                   .GreaterThan(0)

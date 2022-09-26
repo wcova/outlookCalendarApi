@@ -1,52 +1,44 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using outlookCalendarApi.Application.Dtos;
 using outlookCalendarApi.Application.Settings;
 using outlookCalendarApi.Domain.Exceptions;
 using outlookCalendarApi.Infrastructure.Clients.Interfaces;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace outlookCalendarApi.Application.UserCases.V1.EventOperations.Queries
+namespace outlookCalendarApi.Application.UserCases.V1.EventOperations.Commands.Delete
 {
-    public class GetEventByIdQuery : IRequest<Response<EventDto>>
+    public class CreateEventCommand : IRequest<Response<EventDto>>
     {
         public string Token { get; set; }
-        public string Id { get; set; }
+        public EventDto Event { get; set; }
     }
 
-    public class GetEventByIdQueryHandler : IRequestHandler<GetEventByIdQuery, Response<EventDto>>
+    public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, Response<EventDto>>
     {
         private readonly IGraphClient _graphClient;
-        public GetEventByIdQueryHandler(IGraphClient graphClient)
+        private readonly IMediator _mediator;
+        public CreateEventCommandHandler(IGraphClient graphClient, IMediator mediator)
         {
             _graphClient = graphClient;
+            _mediator = mediator;
         }
 
-        public async Task<Response<EventDto>> Handle(GetEventByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Response<EventDto>> Handle(CreateEventCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                var eventById = await _graphClient.GetEventById(request.Token, request.Id);
+                var eventCalendar = await _graphClient.CreateEvent(request.Event, request.Token);
 
                 return new Response<EventDto>
                 {
-                    Content = eventById,
+                    Content = eventCalendar,
                     StatusCode = System.Net.HttpStatusCode.OK
                 };
             }
             catch (ClientException ex)
             {
-                if (ex.HttpStatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    return new Response<EventDto>
-                    {
-                        StatusCode = System.Net.HttpStatusCode.NotFound
-                    };
-                }
-                else if (ex.HttpStatusCode == System.Net.HttpStatusCode.Unauthorized)
+                if (ex.HttpStatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
                     var response = new Response<EventDto>();
                     response.AddNotification("#1001", "tokenGraph", "InvalidToken");

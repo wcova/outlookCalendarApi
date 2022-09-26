@@ -43,7 +43,8 @@ namespace outlookCalendarApi.Infrastructure.Clients
             var tokenGraph = await this.PostAsync<TokenGraphDto>(
                 _azureAD.Instance + _azureAD.Endpoint_Token,
                 body,
-                true);
+                string.Empty,
+                false);
 
             if (tokenGraph != null)
                 accessToken = tokenGraph.Access_token;
@@ -53,7 +54,7 @@ namespace outlookCalendarApi.Infrastructure.Clients
 
         public async Task<OdataDto<EventDto>> GetEvents(string tokenGraph, PaggingBase pagging)
         {
-            var endpoint = _graph.Instance + _graph.Endpoint_GET_Events;
+            var endpoint = _graph.Instance + _graph.Endpoint_Events;
 
             var query = HttpUtility.ParseQueryString(string.Empty);
             query["$top"] = pagging.PageSize.ToString();
@@ -70,7 +71,7 @@ namespace outlookCalendarApi.Infrastructure.Clients
 
         public async Task<EventDto> GetEventById(string tokenGraph, string id)
         {
-            var endpoint = _graph.Instance + _graph.Endpoint_GET_EventById;
+            var endpoint = _graph.Instance + _graph.Endpoint_Events;
 
             var eventById = await this.GetAsync<EventDto>(
                 $"{endpoint}/{id}",
@@ -82,12 +83,38 @@ namespace outlookCalendarApi.Infrastructure.Clients
 
         public async Task DeleteEventById(string tokenGraph, string id)
         {
-            var endpoint = _graph.Instance + _graph.Endpoint_GET_EventById;
+            var endpoint = _graph.Instance + _graph.Endpoint_Events;
 
             await this.DeleteAsync(
                 $"{endpoint}/{id}",
                 tokenGraph,
                 true);
+        }
+
+        public async Task<EventDto> CreateEvent(EventDto eventCalender, string token)
+        {
+            var endpoint = _graph.Instance + _graph.Endpoint_Events;
+
+            var response = await this.PostAsync<EventDto>(
+                endpoint,
+                eventCalender,
+                token,
+                true);
+
+            return response;
+        }
+
+        public async Task<EventDto> UpdateEvent(EventDto eventCalender, string token)
+        {
+            var endpoint = _graph.Instance + _graph.Endpoint_Events;
+
+            var response = await this.UpdateAsync<EventDto>(
+                $"{endpoint}/{eventCalender.Id}",
+                eventCalender,
+                token,
+                true);
+
+            return response;
         }
     }
 }

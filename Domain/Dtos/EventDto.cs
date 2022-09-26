@@ -32,8 +32,8 @@ namespace outlookCalendarApi.Application.Dtos
 
     public class TimeDto
     {
-        public DateTime DateTime { get; set; }
-        public string TImeZone { get; set; }
+        public string DateTime { get; set; }
+        public string TimeZone { get; set; }
     }
 
     public class EmailDto
