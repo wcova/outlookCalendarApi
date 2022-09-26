@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using outlookCalendarApi.Application.Requests;
+using outlookCalendarApi.Application.Settings;
 
 namespace outlookCalendarApi.Application.UserCases.V1.EventOperations.Queries
 {
-    public class GetEventsValidator : AbstractValidator<GetEventsRequest>
+    public class GetEventsValidator : AbstractValidator<PaggingBase>
     {
         public GetEventsValidator()
         {

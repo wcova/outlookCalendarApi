@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
+using outlookCalendarApi.Application.Dtos;
+using outlookCalendarApi.Domain.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace outlookCalendarApi.Infrastructure.Clients
 {
@@ -56,7 +58,40 @@ namespace outlookCalendarApi.Infrastructure.Clients
 
             var response = await httpResponse.Content.ReadAsStringAsync();
 
+            if(httpResponse.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                var error = JsonConvert.DeserializeObject<Error>(response);
+
+                throw new ClientException(
+                    string.Format("Code: {0},Message: {1}", error.Code, error.Message), 
+                    httpResponse.StatusCode);
+            }
+
             return JsonConvert.DeserializeObject<T>(response);
+        }
+
+        public async Task DeleteAsync(
+            string request,
+            string token = "",
+            bool IsWithToken = false)
+        {
+            var client = _clientFactory.CreateClient();
+
+            if (IsWithToken)
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var httpResponse = await client.DeleteAsync(request);
+
+            var response = await httpResponse.Content.ReadAsStringAsync();
+
+            if (httpResponse.StatusCode != System.Net.HttpStatusCode.NoContent)
+            {
+                var error = JsonConvert.DeserializeObject<Error>(response);
+
+                throw new ClientException(
+                    string.Format("Code: {0},Message: {1}", error.Code, error.Message),
+                    httpResponse.StatusCode);
+            }
         }
     }
 }

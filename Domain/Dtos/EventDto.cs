@@ -6,6 +6,7 @@ namespace outlookCalendarApi.Application.Dtos
 {
     public class EventDto
     {
+        public string Id { get; set; }
         public string Subject { get; set; }
         public BodyDto Body { get; set; }
         public TimeDto Start { get; set; }

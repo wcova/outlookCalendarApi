@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using outlookCalendarApi.Application.Dtos;
-using outlookCalendarApi.Application.Requests;
 using outlookCalendarApi.Application.Settings;
 using outlookCalendarApi.Infrastructure.Clients.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
@@ -54,13 +51,13 @@ namespace outlookCalendarApi.Infrastructure.Clients
             return accessToken;
         }
 
-        public async Task<OdataDto<EventDto>> GetEvents(string tokenGraph, GetEventsRequest request)
+        public async Task<OdataDto<EventDto>> GetEvents(string tokenGraph, PaggingBase pagging)
         {
             var endpoint = _graph.Instance + _graph.Endpoint_GET_Events;
 
             var query = HttpUtility.ParseQueryString(string.Empty);
-            query["$top"] = request.PageSize.ToString();
-            query["$skip"] = request.GetSkip().ToString();
+            query["$top"] = pagging.PageSize.ToString();
+            query["$skip"] = pagging.GetSkip().ToString();
             query["$count"] = "true";
 
             var events = await this.GetAsync<OdataDto<EventDto>>(
@@ -69,6 +66,28 @@ namespace outlookCalendarApi.Infrastructure.Clients
                 true);
 
             return events;
+        }
+
+        public async Task<EventDto> GetEventById(string tokenGraph, string id)
+        {
+            var endpoint = _graph.Instance + _graph.Endpoint_GET_EventById;
+
+            var eventById = await this.GetAsync<EventDto>(
+                $"{endpoint}/{id}",
+                tokenGraph,
+                true);
+
+            return eventById;
+        }
+
+        public async Task DeleteEventById(string tokenGraph, string id)
+        {
+            var endpoint = _graph.Instance + _graph.Endpoint_GET_EventById;
+
+            await this.DeleteAsync(
+                $"{endpoint}/{id}",
+                tokenGraph,
+                true);
         }
     }
 }

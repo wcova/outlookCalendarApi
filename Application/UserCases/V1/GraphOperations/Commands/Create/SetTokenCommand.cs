@@ -35,7 +35,7 @@ namespace outlookCalendarApi.Application.UserCases.V1.GraphOperations.Commands.C
             }
             else
             {
-                response.AddNotification("#1001", nameof(token), "Invalid Token");
+                response.AddNotification("#1001", "tokenGraph", "Invalid Token");
                 response.StatusCode = HttpStatusCode.BadRequest;
             }
 
